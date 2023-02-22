@@ -1,19 +1,12 @@
 package com.filipswiszcz.security;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import com.filipswiszcz.entity.User;
+//import java.util.Collection;
 
 public final class Rank {
 
     private final Type type;
 
-    private final Collection<Permission> permissions = new ArrayList<>();
-
-    private boolean capacity;
-    private int size;
-    private final Collection<User> members = new ArrayList<>();
+    //private final Collection<Permission> permissions = new ArrayList<>(); // set would be probably better
 
     public Rank(Type type) {
         this.type = type;
@@ -23,7 +16,7 @@ public final class Rank {
         return type;
     }
 
-    public Collection<Permission> getPermissions() {
+    /*public Collection<Permission> getPermissions() {
         return permissions;
     }
 
@@ -34,60 +27,30 @@ public final class Rank {
     public void addPermission(Permission permission) {
         if (this.hasPermission(permission)) return;
         this.permissions.add(permission);
-    }
-
-    public boolean hasCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(boolean capacity) {
-        this.capacity = capacity;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        if (!this.hasCapacity()) return;
-        this.size = size;
-    }
-
-    public Collection<User> getMembers() {
-        return members;
-    }
-
-    public boolean hasMember(User user) {
-        return members.contains(user);
-    }
-
-    public void addMember(User user) {
-        if (!this.hasCapacity()) {
-            if (!this.hasMember(user)) this.addMember(user);
-            else return;
-        } else {
-            if (this.getMembers().size() >= this.getSize()) return;
-            else this.addMember(user);
-        }
-
-    }
+    }*/
 
     public enum Type {
 
-        USER("user"),
-        VIP("vip"),
-        MOD("mod"),
-        OWNER("owner"),
-        DEV("dev");
+        USER("user", 1),
+        VIP("vip", 2),
+        MOD("mod", 3),
+        OWNER("root", 4),
+        DEV("dev", 5);
 
         private final String name;
+        private final int admittance;
 
-        Type(String name) {
+        Type(String name, int admittance) {
             this.name = name;
+            this.admittance = admittance;
         }
 
         public String getName() {
             return name;
+        }
+
+        public int getAdmittance() {
+            return admittance;
         }
 
     }

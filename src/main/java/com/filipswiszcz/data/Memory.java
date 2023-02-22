@@ -2,13 +2,34 @@ package com.filipswiszcz.data;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 import com.filipswiszcz.entity.User;
-import com.filipswiszcz.security.Rank;
+
+import net.kyori.adventure.text.Component;
 
 public final class Memory {
 
-    private final Collection<User> users = new ArrayList<>();
-    private final Collection<Rank> ranks = new ArrayList<>();
+    private final Collection<User> users = new HashSet<>();
+
+    public Memory() {}
+
+    public Collection<User> getUsers() {
+        return users;   
+    }
     
+    public User getUser(Component name) {
+       return users.stream()
+            .filter(user -> user.getName().equals(name)
+                 && user.isActive()).findAny().get();
+    }
+
+    public void addUser(User user) {
+        this.users.add(user);
+    }
+
+    public void removeUser(User user) {
+        this.users.remove(user);
+    }
+
 }

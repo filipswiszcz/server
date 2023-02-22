@@ -5,7 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
-import java.util.Random;
 
 import javax.imageio.ImageIO;
 
@@ -25,6 +24,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
+import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.item.ItemStack;
@@ -44,6 +44,7 @@ public final class Global {
             this.setDescription();
             this.setConnection();
             this.setLogin();
+            this.setChat();
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
@@ -80,16 +81,17 @@ public final class Global {
     private void setConnection() {
         this.handler.addListener(AsyncPlayerPreLoginEvent.class, event -> {
             if (!Server.getLoader().getWorld("earth").isChunkLoaded(new Pos(0, 200, 0))) {
-                event.getPlayer().getPlayerConnection().disconnect();
                 Server.getLoader().getWorld("earth").loadChunk(new Pos(0, 200, 0));
+                event.getPlayer().getPlayerConnection().disconnect();
             } else return;
         });
     }
 
     private void setLogin() {
-        int random = new Random().nextInt(100);
         this.handler.addListener(PlayerLoginEvent.class, event -> {
             User user = new User(event.getPlayer().getUuid(), event.getPlayer().getName().toString(), event.getPlayer().getPlayerConnection());
+            Server.getMemory().addUser(user);
+            System.out.print("User added");
             /*if (event.getPlayer().getPlayerConnection()
                 .getServerAddress().equalsIgnoreCase("mcsu.pl")) 
                     user.setLanguage(Language.ENGLISH);*/ // change later, add subdomains
@@ -110,6 +112,22 @@ public final class Global {
                 NotificationCenter.send(connected, event.getPlayer());
             }
             event.getPlayer().sendMessage(user.getRankType().getName());
+        });
+    }
+
+    private void setChat() {
+        this.handler.addListener(PlayerChatEvent.class, event -> {
+            event.setChatFormat(format -> {
+                return Component.text("")
+                    .append(Component.text("<MODERATOR> ", TextColor.fromHexString("#bdc3c7")))
+                        .decoration(TextDecoration.ITALIC, false)
+                    .append(Component.text(format.getPlayer().getName().toString(), TextColor.fromHexString("#8e44ad")))
+                        .decoration(TextDecoration.ITALIC, false)
+                    .append(Component.text(" -> ", TextColor.fromHexString("#9b59b6")))
+                        .decoration(TextDecoration.ITALIC, false)
+                    .append(Component.text(format.getMessage(), TextColor.fromHexString("#ecf0f1")))
+                        .decoration(TextDecoration.ITALIC, false);
+            });
         });
     }
     
