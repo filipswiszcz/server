@@ -1,13 +1,9 @@
 package com.filipswiszcz.command;
 
-import java.util.Locale;
+//import java.util.Locale;
 
-import com.filipswiszcz.Server;
-
-import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
@@ -37,12 +33,11 @@ public final class Mode extends Command {
 
     private void execute(Player sender, GameMode mode) {
         sender.setGameMode(mode);
-        String gamemodeString = "gameMode." + mode.name().toLowerCase(Locale.ROOT);
-        Component gamemodeComponent = Component.translatable(gamemodeString);
-        sender.sendMessage(Server.getMemory().getUser(sender.getName()).getName());
+        //String gamemodeString = "gameMode." + mode.name().toLowerCase(Locale.ROOT);
+        //Component gamemodeComponent = Component.translatable(gamemodeString);
 
         //Send the translated message to the player.
-        sender.sendMessage(Component.translatable("commands.gamemode.success.self", gamemodeComponent), MessageType.SYSTEM);
+        //sender.sendMessage(Component.translatable("commands.gamemode.success.self", gamemodeComponent), MessageType.SYSTEM);
     }
     
 }

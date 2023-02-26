@@ -1,6 +1,5 @@
 package com.filipswiszcz.data;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -20,8 +19,8 @@ public final class Memory {
     
     public User getUser(Component name) {
        return users.stream()
-            .filter(user -> user.getName().equals(name)
-                 && user.isActive()).findAny().get();
+            .filter(user -> user.getChild().getName().equals(name)
+                 && user.getChild().isActive()).findAny().get();
     }
 
     public void addUser(User user) {

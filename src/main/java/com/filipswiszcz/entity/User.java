@@ -1,26 +1,33 @@
 package com.filipswiszcz.entity;
 
-import java.util.UUID;
-
-import com.filipswiszcz.security.Rank;
-
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.player.PlayerConnection;
 
-public class User extends Player {
+public class User {
+
+    private final long id;
+
+    private final Player player;
 
     private Language language;
-    
-    private Rank.Type type;
+    private Rank rank;
 
-    public User(UUID uuid, String username, PlayerConnection playerConnection) {
-        this(uuid, username, playerConnection, Language.POLISH, Rank.Type.USER);
+    public User(Player player) {
+        this(player, Language.POLISH, Rank.USER);
     }
 
-    public User(UUID uuid, String username, PlayerConnection playerConnection, Language language, Rank.Type type) {
-        super(uuid, username, playerConnection);
+    public User(Player player, Language language, Rank rank) {
+        this.id = 0; // generate id
+        this.player = player;
         this.language = language;
-        this.type = type;
+        this.rank = rank;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public Player getChild() {
+        return player;
     }
 
     public Language getLanguage() {
@@ -31,18 +38,47 @@ public class User extends Player {
         this.language = language;
     }
 
-    public Rank.Type getRankType() {
-        return type;
+    public Rank getRank() {
+        return rank;
     }
 
-    public void setRankType(Rank.Type type) {
-        this.type = type;
+    public void setRank(Rank rank) {
+        this.rank = rank;
     }
 
     public enum Language {
 
         ENGLISH,
         POLISH;
+
+    }
+
+    public enum Rank {
+
+        USER("user", 1),
+        VIP("vip", 2),
+        MOD("mod", 3),
+        ROOT("root", 4),
+        DEV("dev", 5);
+        // ROOT("root", 4, "<owner>", "<właściciel>")
+
+        private final String name;
+        private final int admittance;
+        // private final Component english;
+        // private final Component polish;
+
+        Rank(String name, int admittance) {
+            this.name = name;
+            this.admittance = admittance;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getAdmittance() {
+            return admittance;
+        }
 
     }
     
